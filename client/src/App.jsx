@@ -8,7 +8,12 @@ import { LogOut, LayoutDashboard } from 'lucide-react';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
-  if (loading) return <div>Loading...</div>;
+  if (loading) return (
+    <div className="loading-container">
+      <div className="spinner" />
+      <p className="text-secondary text-sm">Loading...</p>
+    </div>
+  );
   return user ? children : <Navigate to="/auth" />;
 };
 
@@ -16,22 +21,39 @@ function App() {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const initials = user?.name
+    ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    : '?';
+
   return (
     <>
       {user && (
         <header className="header">
-          <div className="flex items-center gap-4">
-            <LayoutDashboard className="text-primary" />
-            <span className="text-xl">TaskMaster</span>
+          <div className="header-brand">
+            <div className="header-brand-icon">
+              <LayoutDashboard size={18} color="white" />
+            </div>
+            <span className="header-brand-name">TaskMaster</span>
           </div>
+
           <div className="nav-links">
-            <span className="text-secondary">Welcome, {user.name}</span>
-            <button className="btn-secondary" onClick={() => { logout(); navigate('/auth'); }}>
-              <LogOut size={16} /> Logout
+            <div className="user-chip">
+              <div className="user-avatar">{initials}</div>
+              <span className="text-sm font-medium">{user.name}</span>
+              <span className={`role-badge ${user.role?.toLowerCase()}`}>{user.role}</span>
+            </div>
+            <button
+              className="btn-secondary"
+              style={{ padding: '0.5rem 1rem', fontSize: '0.82rem' }}
+              onClick={() => { logout(); navigate('/auth'); }}
+            >
+              <LogOut size={15} />
+              Sign Out
             </button>
           </div>
         </header>
       )}
+
       <main>
         <Routes>
           <Route path="/auth" element={<Auth />} />

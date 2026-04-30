@@ -92,4 +92,22 @@ router.put('/:id', authenticate, async (req, res) => {
   }
 });
 
+// Delete a task
+router.delete('/:id', authenticate, async (req, res) => {
+  try {
+    const task = await prisma.task.findUnique({ where: { id: req.params.id }, include: { project: true } });
+    if (!task) return res.status(404).json({ error: 'Task not found' });
+
+    const isMember = task.project.ownerId === req.user.id || await prisma.projectMember.findUnique({
+      where: { userId_projectId: { userId: req.user.id, projectId: task.projectId } }
+    });
+    if (!isMember) return res.status(403).json({ error: 'Access denied' });
+
+    await prisma.task.delete({ where: { id: req.params.id } });
+    res.json({ message: 'Task deleted' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

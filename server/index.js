@@ -30,7 +30,8 @@ app.use('/api/tasks', taskRoutes);
 
 // Serve frontend
 app.use(express.static(path.join(__dirname, '../client/dist')));
-app.get('*', (req, res) => {
+// Serve frontend - all non-API routes go to React
+app.get(/(.*)/, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
