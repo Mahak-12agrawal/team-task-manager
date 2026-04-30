@@ -2,11 +2,22 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const { execSync } = require('child_process');
+
+dotenv.config();
+
+// Run DB migration on startup
+try {
+  console.log('Running database migrations...');
+  execSync('npx prisma db push --accept-data-loss', { stdio: 'inherit' });
+  console.log('Database migrations complete.');
+} catch (err) {
+  console.error('Migration failed:', err.message);
+}
+
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
 const taskRoutes = require('./routes/tasks');
-
-dotenv.config();
 
 const app = express();
 app.use(cors());

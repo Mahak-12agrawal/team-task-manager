@@ -1,9 +1,8 @@
 const express = require('express');
-const { PrismaClient } = require('@prisma/client');
+const prisma = require('../prisma');
 const { authenticate, authorizeAdmin } = require('../middlewares/auth');
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 // Get projects for current user
 router.get('/', authenticate, async (req, res) => {
