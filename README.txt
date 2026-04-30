@@ -2,8 +2,8 @@
   TEAM TASK MANAGER — Full-Stack Web Application
 ===============================================================
 
-LIVE URL   : https://<your-railway-app>.up.railway.app
-GITHUB REPO: https://github.com/<your-username>/team-task-manager
+LIVE URL   : https://team-task-manager-production-8536.up.railway.app
+GITHUB REPO: https://github.com/Mahak-12agrawal/team-task-manager
 
 ---------------------------------------------------------------
   PROJECT OVERVIEW
